@@ -45,7 +45,7 @@ void connection::close(SOCKET socket_ptr)
 
 void connection::handle_connection_async(SOCKET socket_ptr)
 {
-    std::cout << "Handling " << socket_ptr << " on thread " << std::this_thread::get_id() << '\n';
+    //std::cout << "Handling " << socket_ptr << " on thread " << std::this_thread::get_id() << '\n';
 
     int constexpr buffer_size = common::socket::message_buffer_size;
     char receiveBuffer[buffer_size];
@@ -61,19 +61,19 @@ void connection::handle_connection_async(SOCKET socket_ptr)
         int result = recv(socket_ptr, receiveBuffer, buffer_size, 0);
         if (result > 0)
         {
-            std::cout << "Bytes received: " << result << '\n';
+            //std::cout << "Bytes received: " << result << '\n';
 
             auto new_message = std::make_shared<common::socket::message>();
             new_message->data = new char[result];
             memcpy(new_message->data, receiveBuffer, result);
             new_message->size = result;
-            std::cout << new_message->data << '\n';
+            //std::cout << new_message->data << '\n';
 
-            {
-                static std::mutex mutex;
-                std::lock_guard<std::mutex> lock(mutex);
+            //{
+              //  static std::mutex mutex;
+                //std::lock_guard<std::mutex> lock(mutex);
                 socket::message_callbacks(shared_from_this(), new_message, socket_ptr);    
-            }
+            //}
             
         }
     }

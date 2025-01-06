@@ -86,7 +86,7 @@ namespace common
             
             if (ClientSocket > 0)
             {
-                std::cout << "Client connected on " << ClientSocket << '\n';
+                //std::cout << "Client connected on " << ClientSocket << '\n';
                 connection::create(this, ClientSocket);
             }
         }

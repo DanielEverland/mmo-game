@@ -4,7 +4,7 @@
 
 bool string_utility::try_parse_next_word(std::stringstream& in_stream, std::string& word)
 {
-    static char word_buffer[64];
+    char word_buffer[64];
 
     int idx = 0;
     char curr;
@@ -26,7 +26,7 @@ bool string_utility::try_parse_next_word(std::stringstream& in_stream, std::stri
 
 bool string_utility::try_parse_line(std::stringstream& in_stream, std::string& line)
 {
-    static char line_buffer[512];
+    char line_buffer[512];
 
     int idx = 0;
     char curr;
@@ -48,7 +48,7 @@ bool string_utility::try_parse_line(std::stringstream& in_stream, std::string& l
 
 bool string_utility::try_parse_line_split(std::stringstream& in_stream, char deliminator, std::string& first, std::string& second)
 {
-    static char buffer[64];
+    char buffer[64];
 
     bool has_seen_delim = false;
     int idx = 0;

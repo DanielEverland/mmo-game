@@ -20,7 +20,7 @@ webserver::webserver(int in_port)
 
 void webserver::tick()
 {
-    std::cout << "Creating socket on thread " << std::this_thread::get_id() << '\n';
+    //std::cout << "Creating socket on thread " << std::this_thread::get_id() << '\n';
     auto serverSocket = common::socket(8080);
     common::socket::message_callbacks = std::bind(&webserver::handle_request, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
     
