@@ -28,14 +28,14 @@ namespace common
         
         static constexpr int message_buffer_size = 512;
         
-        static inline std::function<void(connection*, shared_ptr<message>, SOCKET)> message_callbacks = { };
+        static inline std::function<void(shared_ptr<connection>, shared_ptr<message>, SOCKET)> message_callbacks = { };
         
         socket(int port);
 
         void tick();
         SOCKET get_socket() const { return ListenSocket; }
         
-        void on_received_message(shared_ptr<message> new_message, connection* conn, SOCKET socket_ptr);
+        void on_received_message(shared_ptr<message> new_message, shared_ptr<connection> conn, SOCKET socket_ptr);
         
     private:
 #if _WIN32

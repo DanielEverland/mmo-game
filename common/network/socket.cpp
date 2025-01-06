@@ -29,7 +29,7 @@ namespace common
 
     socket::message::~message()
     {
-        delete[] data;
+        //delete[] data;
     }
 
     socket::socket(int port)
@@ -93,7 +93,7 @@ namespace common
 #endif
     }
 
-    void socket::on_received_message(shared_ptr<message> new_message, connection* conn, SOCKET socket_ptr)
+    void socket::on_received_message(shared_ptr<message> new_message, shared_ptr<connection> conn, SOCKET socket_ptr)
     {
         message_callbacks(conn, new_message, socket_ptr);
     }

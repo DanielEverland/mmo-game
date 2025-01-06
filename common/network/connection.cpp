@@ -15,9 +15,8 @@ void connection::create(common::socket* in_owner, SOCKET socket_ptr)
 {
     assert(in_owner != nullptr);
     assert(socket_ptr != INVALID_SOCKET);
-    
-    all_connections.push_back(connection(in_owner));
-    connection* conn = &all_connections.back();
+
+    shared_ptr<connection> conn = make_shared<connection>(in_owner);
     std::thread thread(&connection::handle_connection_async, conn, socket_ptr);
     thread.detach();
 }
@@ -39,6 +38,7 @@ void connection::send_message(shared_ptr<common::socket::message> msg, SOCKET so
 
 void connection::close(SOCKET socket_ptr)
 {
+    shutdown(socket_ptr, SD_SEND);
     closesocket(socket_ptr);
     is_active_ = false;
 }
@@ -72,7 +72,7 @@ void connection::handle_connection_async(SOCKET socket_ptr)
             {
                 static std::mutex mutex;
                 std::lock_guard<std::mutex> lock(mutex);
-                socket::message_callbacks(this, new_message, socket_ptr);    
+                socket::message_callbacks(shared_from_this(), new_message, socket_ptr);    
             }
             
         }

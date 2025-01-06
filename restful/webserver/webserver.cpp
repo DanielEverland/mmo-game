@@ -30,7 +30,7 @@ void webserver::tick()
     }
 }
 
-void webserver::handle_request(common::connection* conn, std::shared_ptr<common::socket::message> msg, SOCKET socket_ptr)
+void webserver::handle_request(shared_ptr<common::connection> conn, std::shared_ptr<common::socket::message> msg, SOCKET socket_ptr)
 {
     shared_ptr<request> new_request = std::make_shared<request>();
     bool succeeded = request::try_parse(msg, new_request);

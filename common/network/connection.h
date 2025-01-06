@@ -7,7 +7,7 @@
 
 namespace common
 {    
-    class connection
+    class connection : public std::enable_shared_from_this<connection>
     {
     public:
         explicit connection(socket* in_owner);
@@ -32,7 +32,5 @@ namespace common
 
         // Thread will die when this is false
         bool is_active_ = true;
-    
-        static inline std::vector<connection> all_connections = {};
     };
 }

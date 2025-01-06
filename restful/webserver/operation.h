@@ -32,7 +32,7 @@ public:
     std::string get_path() const { return path; }
     method get_method() const { return method; }
 
-    virtual void execute(common::connection* conn, shared_ptr<request> request, SOCKET socket_ptr) { }
+    virtual void execute(shared_ptr<common::connection> conn, shared_ptr<request> request, SOCKET socket_ptr) { }
 
 private:
     std::string path;
