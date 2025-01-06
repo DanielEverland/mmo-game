@@ -15,7 +15,7 @@ public:
 
 private:
     void tick();
-    void handle_request(common::connection* conn, std::shared_ptr<common::socket::message> msg);
+    void handle_request(common::connection* conn, std::shared_ptr<common::socket::message> msg, SOCKET socket_ptr);
 
     std::map<std::string, shared_ptr<operation>> operations;
     std::thread worker;

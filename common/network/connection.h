@@ -10,10 +10,10 @@ namespace common
     class connection
     {
     public:
-        explicit connection(socket* in_owner, SOCKET in_socket);
+        explicit connection(socket* in_owner);
 
-        void send_message(std::shared_ptr<socket::message> msg);
-        void close();
+        void send_message(std::shared_ptr<socket::message> msg, SOCKET socket_ptr);
+        void close(SOCKET socket_ptr);
     
 #if _WIN32
         static void create(socket* in_owner, SOCKET socket_ptr);
@@ -29,7 +29,6 @@ namespace common
 
     private:
         socket* owner;
-        SOCKET socket;
 
         // Thread will die when this is false
         bool is_active_ = true;

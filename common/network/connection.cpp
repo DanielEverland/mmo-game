@@ -16,20 +16,20 @@ void connection::create(common::socket* in_owner, SOCKET socket_ptr)
     assert(in_owner != nullptr);
     assert(socket_ptr != INVALID_SOCKET);
     
-    all_connections.push_back(connection(in_owner, socket_ptr));
+    all_connections.push_back(connection(in_owner));
     connection* conn = &all_connections.back();
     std::thread thread(&connection::handle_connection_async, conn, socket_ptr);
     thread.detach();
 }
 
-connection::connection(common::socket* in_owner, SOCKET in_socket) : owner(in_owner), socket(in_socket)
+connection::connection(common::socket* in_owner) : owner(in_owner)
 {
     
 }
 
-void connection::send_message(shared_ptr<common::socket::message> msg)
+void connection::send_message(shared_ptr<common::socket::message> msg, SOCKET socket_ptr)
 {
-    int iSendResult = send(socket, msg->data, msg->size, 0);
+    int iSendResult = send(socket_ptr, msg->data, msg->size, 0);
     if (iSendResult == SOCKET_ERROR)
     {
         std::cout << "send failed: " << WSAGetLastError() << std::endl;
@@ -37,9 +37,9 @@ void connection::send_message(shared_ptr<common::socket::message> msg)
     assert(iSendResult != SOCKET_ERROR);
 }
 
-void connection::close()
+void connection::close(SOCKET socket_ptr)
 {
-    closesocket(socket);
+    closesocket(socket_ptr);
     is_active_ = false;
 }
 
@@ -49,8 +49,7 @@ void connection::handle_connection_async(SOCKET socket_ptr)
 
     int constexpr buffer_size = common::socket::message_buffer_size;
     char receiveBuffer[buffer_size];
-
-
+    
     fd_set socket_fd;
     FD_ZERO(&socket_fd);
     FD_SET(socket_ptr, &socket_fd);
@@ -69,8 +68,13 @@ void connection::handle_connection_async(SOCKET socket_ptr)
             memcpy(new_message->data, receiveBuffer, result);
             new_message->size = result;
             std::cout << new_message->data << '\n';
+
+            {
+                static std::mutex mutex;
+                std::lock_guard<std::mutex> lock(mutex);
+                socket::message_callbacks(this, new_message, socket_ptr);    
+            }
             
-            owner->on_received_message(new_message, this);
         }
     }
 }

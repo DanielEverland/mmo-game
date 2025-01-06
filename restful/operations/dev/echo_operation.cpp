@@ -8,10 +8,10 @@ echo_operation::echo_operation() : operation(GET, "/dev/echo")
 {
 }
 
-void echo_operation::execute(common::connection* conn, shared_ptr<request> request)
+void echo_operation::execute(common::connection* conn, shared_ptr<request> request, SOCKET socket_ptr)
 {
     auto message = response(status_code::OK);
     message.content = request->get_content();
     
-    conn->send_message(message);
+    conn->send_message(message, socket_ptr);
 }

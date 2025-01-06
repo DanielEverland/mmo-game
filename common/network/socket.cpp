@@ -93,9 +93,9 @@ namespace common
 #endif
     }
 
-    void socket::on_received_message(shared_ptr<message> new_message, connection* conn)
+    void socket::on_received_message(shared_ptr<message> new_message, connection* conn, SOCKET socket_ptr)
     {
-        message_callbacks(conn, new_message);
+        message_callbacks(conn, new_message, socket_ptr);
     }
 
 #if _WIN32
